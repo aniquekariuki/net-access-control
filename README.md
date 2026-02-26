@@ -36,25 +36,15 @@ The managed switch is configured with:
 
 ### 3.1 Current State (Baseline)
 
-```
-[ISP] --- [Basic Router] --- [Unmanaged Switch] --- [50 PCs]
-```
+![Current Network State](diagrams/current_network.png)
 
 A flat network with no segmentation, no monitoring, and no access control.
 
 ### 3.2 Proposed State (Secured)
 
-```
-[ISP]
-  |
-[Edge Router] -- QoS rate-limiting, NetFlow export, inter-VLAN routing
-  |
-[Managed Switch] -- Port Security, DHCP Snooping, VLAN trunk
-  |
-  |--- VLAN 10 (Lab Workstations) -- 50 PCs
-  |--- VLAN 20 (Administration)   -- Staff machines
-  |--- VLAN 99 (Management)       -- Network device management
-```
+![Proposed Network Design](diagrams/proposed_network.png)
+
+The redesigned network introduces VLAN segmentation, QoS rate-limiting on the edge router, NetFlow for traffic visibility, and Port Security with DHCP Snooping on the managed switch.
 
 ## 4. Repository Structure
 
