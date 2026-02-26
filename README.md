@@ -2,35 +2,34 @@
 
 ## 1. Problem Statement
 
-A computer lab serving 50 workstations relies on a single ISP-provided router to share internet access. During peak hours, users experience severely degraded performance because there is no mechanism to control how bandwidth is distributed. Additionally, the network administrator has no visibility into which devices are consuming resources, and there is no access control to prevent unauthorized devices from connecting to the network.
+A shared computer lab has 50 workstations connected to the internet through a single ISP router. During peak hours, the internet slows down significantly because there is nothing in place to control how bandwidth is shared between the machines. On top of that, the administration has no way to see which computers are using the most bandwidth, and there is no way to stop unauthorized devices (like personal laptops) from being plugged into the network.
 
-This project addresses three critical problems:
+This project solves three problems:
 
-| Problem | Impact |
-|---------|--------|
-| Uncontrolled bandwidth consumption | A small number of devices can saturate the entire link, degrading service for all users |
-| No traffic visibility or monitoring | Administration cannot identify high-usage devices or diagnose congestion |
-| No device access control | Any unauthorized device can connect freely, consuming shared resources and introducing security risks |
+| Problem | What happens |
+|---------|-------------|
+| Bandwidth is not controlled | A few computers downloading heavy files can make the internet unusable for everyone else |
+| No way to monitor traffic | The admin cannot tell which machine is causing the slowdown |
+| No device restrictions | Anyone can plug in a personal device and use the network without permission |
 
-## 2. Proposed Solutions
+## 2. How Each Problem is Solved
 
-Each problem is addressed by a specific, industry-standard network mechanism:
+### 2.1 Controlling Bandwidth with QoS (Quality of Service)
 
-### 2.1 Bandwidth Management via Quality of Service (QoS)
+The edge router is set up with a QoS policy that limits each workstation to a maximum download speed (for example, 2 Mbps per device). This way, even if one user is downloading a large file, the remaining bandwidth is still available for the other 49 machines.
 
-The edge router is configured with QoS policies that enforce per-device rate limiting. Each workstation is capped at a defined maximum bandwidth (e.g., 2 Mbps), ensuring fair distribution of the shared internet link across all 50 machines.
+### 2.2 Monitoring Traffic with NetFlow
 
-### 2.2 Traffic Monitoring via NetFlow and SNMP
+NetFlow is turned on at the router level. It records the traffic going in and out of the network, tracking which IP address is sending or receiving the most data. In a real setup, this data would be sent to a tool like PRTG or Grafana where the admin can view it on a dashboard.
 
-NetFlow is enabled on the edge router to export traffic flow records. In a production deployment, this data would be consumed by a monitoring platform (such as PRTG or Grafana) to generate real-time dashboards showing bandwidth usage by device, protocol, and time of day. SNMP polling provides interface-level statistics such as utilization, error rates, and packet counts.
+### 2.3 Blocking Unauthorized Devices with Port Security and DHCP Snooping
 
-### 2.3 Access Control via Port Security, DHCP Snooping, and VLAN Segmentation
+On the managed switch, two features are configured:
 
-The managed switch is configured with:
+- **Port Security (Sticky MAC):** Each switch port saves the MAC address of the computer connected to it. If someone unplugs the lab PC and connects a different device, the port automatically shuts down.
+- **DHCP Snooping:** Only the router is allowed to hand out IP addresses. This prevents someone from setting up a rogue DHCP server that could redirect traffic.
 
-- **Port Security (Sticky MAC):** Each switch port learns and locks the MAC address of its assigned workstation. If an unknown device is connected, the port is automatically disabled.
-- **DHCP Snooping:** Prevents rogue DHCP servers from assigning false IP configurations to workstations.
-- **VLAN Segmentation:** The lab is placed in a dedicated VLAN to isolate its traffic from other parts of the campus network (e.g., administration, wireless guests).
+The lab network is also placed in its own VLAN (VLAN 10) to keep it separated from admin and management traffic.
 
 ## 3. Network Architecture
 
@@ -38,30 +37,30 @@ The managed switch is configured with:
 
 ![Current Network State](diagrams/current_network.png)
 
-A flat network with no segmentation, no monitoring, and no access control.
+All 50 PCs connect through a basic switch to a single router. There is no segmentation, no monitoring, and no access control.
 
 ### 3.2 Proposed State (Secured)
 
 ![Proposed Network Design](diagrams/proposed_network.png)
 
-The redesigned network introduces VLAN segmentation, QoS rate-limiting on the edge router, NetFlow for traffic visibility, and Port Security with DHCP Snooping on the managed switch.
+The redesigned network uses an enterprise-grade router with QoS and NetFlow, a managed switch with Port Security and DHCP Snooping, and three VLANs to separate lab, admin, and management traffic.
 
 ## 4. Repository Structure
 
 ```
-/configs/        Cisco IOS CLI configuration scripts for the router and switch
-/topology/       Cisco Packet Tracer (.pkt) simulation files
-/diagrams/       Network architecture diagrams (current state and proposed state)
+/configs/        Router and switch CLI configuration scripts
+/topology/       Cisco Packet Tracer simulation files (.pkt)
+/diagrams/       Network diagrams showing the before and after
 ```
 
 ## 5. Tools Used
 
-| Tool | Purpose |
-|------|---------|
-| Cisco Packet Tracer | Network simulation and testing |
-| Draw.io / Diagrams.net | Architecture diagrams |
-| Visual Studio Code | Configuration editing and documentation |
-| Git / GitHub | Version control and project hosting |
+| Tool | What it was used for |
+|------|---------------------|
+| Cisco Packet Tracer | Building and testing the network simulation |
+| Draw.io | Creating the network diagrams |
+| Visual Studio Code | Writing the configuration scripts and documentation |
+| Git and GitHub | Version control and hosting the project |
 
 ## 6. References
 
