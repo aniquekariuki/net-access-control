@@ -53,7 +53,7 @@ vlan 99
 
 ## Trunk Port (Uplink to Edge Router)
 
-This port carries tagged traffic from all VLANs up to the router for inter-VLAN routing. The native VLAN is set to 99 (management) as a security best practice.
+This port carries tagged traffic from all VLANs to the router so it can route between them. The native VLAN is set to 99 instead of the default VLAN 1 for security reasons.
 
 ```
 interface GigabitEthernet0/1
@@ -122,7 +122,7 @@ interface range GigabitEthernet0/2 - 2
 
 ## DHCP Snooping
 
-DHCP Snooping makes sure that only the router (connected through the trunk port) can hand out IP addresses. All workstation-facing ports are untrusted by default, so a rogue device pretending to be a DHCP server will be blocked.
+This feature makes sure only the router can hand out IP addresses. The trunk port is marked as trusted because that is where the real DHCP server is. Every other port is untrusted by default, so if someone connects a rogue DHCP server, it gets blocked.
 
 ```
 ip dhcp snooping
@@ -136,7 +136,7 @@ interface GigabitEthernet0/1
 
 ## Unused Port Hardening
 
-Any switch port that does not have a device connected to it should be shut down. This prevents someone from walking into the lab and plugging into an open port.
+Any port that is not being used should be shut down so no one can just walk in and plug into an open jack.
 
 ```
 ! Apply to any ports not in use, for example:

@@ -104,7 +104,7 @@ ip dhcp pool ADMIN_POOL
 
 This is the fix for the main problem. The policy below matches all traffic from the lab VLAN (192.168.10.0/24) and caps it at 2 Mbps. This prevents any single workstation from using all the bandwidth.
 
-**Note:** Packet Tracer has limited QoS simulation. These commands are valid Cisco IOS syntax and will work on real hardware, but the rate-limiting effect may not be visible in the simulator.
+Packet Tracer does not fully simulate QoS, so the rate-limiting will not be visible in the simulator. However, these are valid Cisco IOS commands that work on real hardware.
 
 ```
 class-map match-all LAB_TRAFFIC
@@ -126,7 +126,7 @@ interface GigabitEthernet0/1.10
 
 NetFlow records every traffic flow passing through the router. It tracks which IP address is sending or receiving data, how much, and where to. The data is exported to a collector at 192.168.99.10 on port 2055, where it can be viewed on a dashboard.
 
-**Note:** Packet Tracer does not support NetFlow commands. These are included as the real-world configuration that would be applied on physical hardware.
+Packet Tracer does not support these commands, but they are included here because this is what would be configured on actual equipment.
 
 ```
 ip flow-export version 5

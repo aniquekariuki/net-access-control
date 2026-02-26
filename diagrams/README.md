@@ -1,12 +1,10 @@
 # Diagrams
 
-This directory contains the visual network architecture diagrams for the project.
-
-## Planned Contents
+This folder has the network diagrams showing how the network looks before and after the changes.
 
 | File | Description |
 |------|-------------|
-| current_network.png | Diagram of the existing flat network topology (baseline assessment) |
-| proposed_network.png | Diagram of the redesigned network with VLAN segmentation, QoS, and access control |
+| current_network.png | The original flat network with no segmentation or security |
+| proposed_network.png | The redesigned network with VLANs, QoS, and Port Security |
 
-These diagrams should be created using Draw.io (diagrams.net) or a similar tool and exported as PNG images for clear rendering on GitHub.
+These were made using Draw.io and exported as PNG.
