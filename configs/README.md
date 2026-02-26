@@ -1,10 +1,10 @@
 # Configuration Scripts
 
-This directory contains the Cisco IOS command-line configuration scripts applied to the network devices in the simulation. These scripts can be directly pasted into a Cisco router or switch CLI to reproduce the configuration.
+This directory contains the Cisco IOS configuration scripts for the network devices used in the simulation. Each file is broken into sections with explanations of what the commands do and why they are needed.
 
 ## Contents
 
-| File | Device | Purpose |
-|------|--------|---------|
-| edge_router_config.txt | Edge Router (Cisco 2911) | QoS rate-limiting, NetFlow export, inter-VLAN routing, NAT |
-| lab_switch_config.txt | Managed Switch (Cisco 2960) | VLAN creation, Port Security, DHCP Snooping, trunk configuration |
+| File | Device | What it configures |
+|------|--------|--------------------|
+| edge_router_config.md | Edge Router (Cisco 2911) | QoS rate-limiting, NetFlow monitoring, NAT, DHCP, inter-VLAN routing |
+| lab_switch_config.md | Managed Switch (Cisco 2960) | VLANs, Port Security, DHCP Snooping, trunk setup |
