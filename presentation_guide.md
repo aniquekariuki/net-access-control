@@ -56,7 +56,18 @@ This guide is designed to help you walk a supervisor or panel through your proje
 
 ---
 
+## 5. Handling Tough Questions: "Why this approach?"
+**The Question:** *"Why did you choose to configure hardware instead of developing a software application to manage the network?"*
+
+**The Answer (What to say):**
+*"I chose a **Network Engineering approach** because security and optimization are most effective at the infrastructure level. By configuring QoS and Port Security directly on the hardware, I've created a solution that is centralized, tamper-proof, and industry-standard."*
+
+*"If I had used software, it would have to be installed and managed on all 50 PCs individually, which is not scalable. Furthermore, software can be bypassed or uninstalled by a savvy user. By moving the logic to the Router and Switch, the network itself becomes the 'enforcer'—making it impossible to bypass without physical access to the server room."*
+
+---
+
 ### Tips for Success:
+- **Know your Role:** You are presenting as a **Network Engineer**, not a Software Developer. Your "code" is the CLI configuration you've documented in the `configs/` folder.
 - **Don't Rush:** Speak slowly and point to the diagrams in the README while you talk.
 - **Know the 'Why':** If they ask why you used VLANs, say: *"To reduce broadcast traffic and increase security through isolation."*
 - **The 'Red Light' is Key:** The most important part of your presentation is showing that red light in the simulation—it's your proof.
