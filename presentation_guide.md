@@ -21,12 +21,16 @@ This guide is designed to help you walk a supervisor or panel through your proje
 
 **Pillar 1: Bandwidth Control (QoS)**
 *"I configured **Quality of Service (QoS)** on the Edge Router. By setting a 2 Mbps limit per device, I've ensured that no single user can 'starve' the rest of the lab of bandwidth."*
+- [**See the QoS Config Code**](configs/edge_router_config.md#L103)
 
 **Pillar 2: Traffic Visibility (NetFlow)**
 *"I enabled **NetFlow** to monitor data flows. This allows the admin to track which IP addresses are using the most data in real-time."*
+- [**See the NetFlow Config Code**](configs/edge_router_config.md#L125)
 
 **Pillar 3: Network Hardening (VLANs & Port Security)**
 *"I segmented the network into **VLANs** (10 for Lab, 20 for Admin). Most importantly, I configured **Port Security with Sticky MAC** on the switches. This effectively 'locks' each port to a specific authorized machine."*
+- [**See the Port Security Config Code**](configs/lab_switch_config.md#L69)
+- [**See the Security Proof Diagram**](diagrams/security_violation.png)
 
 ---
 
