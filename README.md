@@ -36,14 +36,31 @@ The lab network is also placed in its own VLAN (VLAN 10) to keep it separated fr
 ### 3.1 Current State (Baseline)
 
 ![Current Network State](diagrams/current_network.png)
-
-All 50 PCs connect through a basic switch to a single router. There is no segmentation, no monitoring, and no access control.
+*Figure 1: The original, unoptimized network. All devices are in a single flat subnet (192.168.1.0/24) with no traffic control or security.*
 
 ### 3.2 Proposed State (Secured)
 
 ![Proposed Network Design](diagrams/proposed_network.png)
+*Figure 2: The optimized network architecture. It features VLAN segmentation, a "Router-on-a-Stick" configuration, and enterprise security features.*
 
-The redesigned network uses an enterprise-grade router with QoS and NetFlow, a managed switch with Port Security and DHCP Snooping, and three VLANs to separate lab, admin, and management traffic.
+## 4. Demonstration & Results
+
+To verify that the security and optimization measures are working, follow these demonstration steps:
+
+### 4.1 Testing Port Security (Unauthorized Access)
+1.  **Observation:** In the `secured_network.pkt` file, all authorized PCs have green link lights.
+2.  **Action:** Unplug an authorized PC and connect a new **Laptop** to the same switch port.
+3.  **Result:** The port immediately turns **Red** (Status: Down). The switch has detected a MAC address violation and shut down the port to prevent access.
+
+![Port Security Violation](diagrams/security_violation.png)
+*Figure 3: Proof of Port Security. The red link light on the switch port indicates an automatic shutdown after an unauthorized device (Laptop) was connected.*
+
+### 4.2 Testing Inter-VLAN Routing & DHCP
+1.  **Action:** Open the Command Prompt on a Lab PC (VLAN 10).
+2.  **Command:** Run `ipconfig` to verify it received an IP from the `192.168.10.x` range.
+3.  **Command:** Run `ping 192.168.10.1` (Gateway) and `ping 192.168.20.1` (Admin Gateway).
+4.  **Result:** Successful replies prove that the Router is correctly handling traffic between different segments of the network.
+
 
 ## 4. Repository Structure
 
