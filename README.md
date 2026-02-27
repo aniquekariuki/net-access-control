@@ -62,5 +62,7 @@ I've tested everything in Cisco Packet Tracer. If you want to see how the securi
 
 ## 6. Tools I used
 *   **Cisco Packet Tracer** - For building and testing the whole simulation.
-*   **Draw.io** - For making the clean network diagrams.
-*   **GitHub** - To keep track of my work and host the files.
+*   **Git & GitHub** - For version control and hosting the project portfolio.
+*   **Markdown** - To write the technical documentation and presentation guide.
+*   **Draw.io** - For making the clean network architecture diagrams.
+*   **VS Code & PowerShell** - For editing the configuration scripts and managing the file structure.
