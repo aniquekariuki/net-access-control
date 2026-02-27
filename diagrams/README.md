@@ -1,11 +1,14 @@
-# Diagrams
+# Project Screenshots and Proof
 
-This folder has the network diagrams showing how the network looks before and after the changes.
+I've captured these screenshots directly from my Packet Tracer simulation to show exactly what I built and how it works.
 
-| File | Description |
+### The Diagrams
+
+| File | What it shows |
 |------|-------------|
-| current_network.png | The original flat network with no segmentation or security |
-| proposed_network.png | The redesigned network with VLANs, QoS, and Port Security |
-| security_violation.png | Proof of Port Security: Red link light indicating port shutdown |
+| [**current_network.png**](current_network.png) | The basic, unoptimized network we started with. |
+| [**proposed_network.png**](proposed_network.png) | My new design with everything segmented into VLANs. |
+| [**security_violation.png**](security_violation.png) | **The Proof!** This photo shows the switch shutting down a port because a laptop was plugged into a PC's spot. |
 
-These diagrams are screenshots captured directly from the Cisco Packet Tracer simulation.
+---
+[**Back to Main Project Page**](../README.md)

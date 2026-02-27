@@ -1,87 +1,66 @@
-# Network Optimization and Security for a Shared Computer Lab
+# Network Optimization and Security Project
 
-## 1. Problem Statement
+## 1. What's this project about?
 
-A shared computer lab has 50 workstations connected to the internet through a single ISP router. During peak hours, the internet slows down significantly because there is nothing in place to control how bandwidth is shared between the machines. On top of that, the administration has no way to see which computers are using the most bandwidth, and there is no way to stop unauthorized devices (like personal laptops) from being plugged into the network.
+Our school computer lab has about 50 PCs sharing one internet connection. Right now, it's a bit of a mess—if one person starts a big download, everyone else's internet crawls. Plus, there's no way to see who's doing what, and anyone can just walk in and plug their own laptop into the wall and start using our bandwidth.
 
-This project solves three problems:
+This project is my setup for fixing these three main issues:
 
-| Problem | What happens |
-|---------|-------------|
-| Bandwidth is not controlled | A few computers downloading heavy files can make the internet unusable for everyone else |
-| No way to monitor traffic | The admin cannot tell which machine is causing the slowdown |
-| No device restrictions | Anyone can plug in a personal device and use the network without permission |
+| The Problem | Why it's annoying |
+|-------------|-------------------|
+| No Bandwidth Control | One heavy user can slow down the whole lab for everyone else. |
+| Zero Visibility | The admin has no clue which machine is hogging all the data. |
+| Security Risk | People can plug in personal devices that shouldn't be on the network. |
 
-## 2. How Each Problem is Solved
+## 2. How I solved it
 
-### 2.1 Controlling Bandwidth with QoS (Quality of Service)
+I've redesigned the network to be more secure and efficient using three main steps:
 
-The edge router is set up with a QoS policy that limits each workstation to a maximum download speed (for example, 2 Mbps per device). This way, even if one user is downloading a large file, the remaining bandwidth is still available for the other 49 machines.
+### 2.1 Managing Bandwidth (QoS)
+I set up **Quality of Service** on the main router. This basically caps each seat at 2 Mbps, so no matter how big a file someone is downloading, there's always enough left for the other 49 students.
 
-### 2.2 Monitoring Traffic with NetFlow
+### 2.2 Traffic Monitoring (NetFlow)
+I turned on **NetFlow** on the router. This keeps a log of where traffic is going and which IPs are the busiest. It's like having a security camera for our data.
 
-NetFlow is turned on at the router level. It records the traffic going in and out of the network, tracking which IP address is sending or receiving the most data. In a real setup, this data would be sent to a tool like PRTG or Grafana where the admin can view it on a dashboard.
+### 2.3 Port Security & DHCP Snooping
+On the switch, I locked down the ports. Using **Sticky MAC**, the switch remembers which PC belongs there. If you unplug the lab PC and put in a laptop, the port just shuts down. I also added **DHCP Snooping** so no one can mess with our IP address setup.
 
-### 2.3 Blocking Unauthorized Devices with Port Security and DHCP Snooping
+We're also using **VLANs** to keep the student lab separate from the administration and management traffic.
 
-On the managed switch, two features are configured:
+---
 
-- **Port Security (Sticky MAC):** Each switch port saves the MAC address of the computer connected to it. If someone unplugs the lab PC and connects a different device, the port automatically shuts down.
-- **DHCP Snooping:** Only the router is allowed to hand out IP addresses. This prevents someone from setting up a rogue DHCP server that could redirect traffic.
+## 3. The Design
 
-The lab network is also placed in its own VLAN (VLAN 10) to keep it separated from admin and management traffic.
+### 3.1 The "Before" State (Baseline)
+[View Baseline Diagram](diagrams/current_network.png)
 
-## 3. Network Architecture
+This is how the lab looks now—just one big flat network with no control and no security.
 
-### 3.1 Current State (Baseline)
+### 3.2 The "After" State (Secured)
+[View Secured Diagram](diagrams/proposed_network.png)
 
-![Current Network State](diagrams/current_network.png)
-*Figure 1: The original, unoptimized network. All devices are in a single flat subnet (192.168.1.0/24) with no traffic control or security.*
+My new design with the managed switch and the secure router setup. It’s segmented and much harder to mess with.
 
-### 3.2 Proposed State (Secured)
+## 4. Seeing it in Action
 
-![Proposed Network Design](diagrams/proposed_network.png)
-*Figure 2: The optimized network architecture. It features VLAN segmentation, a "Router-on-a-Stick" configuration, and enterprise security features.*
+I've tested everything in Cisco Packet Tracer. If you want to see how the security works:
 
-## 4. Demonstration & Results
+1.  Open the [secured_network.pkt](topology/secured_network.pkt) file.
+2.  Try unplugging a PC and connecting a Laptop to the same port.
+3.  The port will turn **RED** immediately—that's the port security blocking the unauthorized device!
 
-To verify that the security and optimization measures are working, follow these demonstration steps:
+![Proof of security in action](diagrams/security_violation.png)
+*Self-test: The port shutting down after I tried to plug in an unauthorized laptop.*
 
-### 4.1 Testing Port Security (Unauthorized Access)
-1.  **Observation:** In the `secured_network.pkt` file, all authorized PCs have green link lights.
-2.  **Action:** Unplug an authorized PC and connect a new **Laptop** to the same switch port.
-3.  **Result:** The port immediately turns **Red** (Status: Down). The switch has detected a MAC address violation and shut down the port to prevent access.
+---
 
-![Port Security Violation](diagrams/security_violation.png)
-*Figure 3: Proof of Port Security. The red link light on the switch port indicates an automatic shutdown after an unauthorized device (Laptop) was connected.*
+## 5. What's in this repo?
 
-### 4.2 Testing Inter-VLAN Routing & DHCP
-1.  **Action:** Open the Command Prompt on a Lab PC (VLAN 10).
-2.  **Command:** Run `ipconfig` to verify it received an IP from the `192.168.10.x` range.
-3.  **Command:** Run `ping 192.168.10.1` (Gateway) and `ping 192.168.20.1` (Admin Gateway).
-4.  **Result:** Successful replies prove that the Router is correctly handling traffic between different segments of the network.
+*   [**Configs Folder**](configs/) - The actual scripts for the router and switch.
+*   [**Topology Folder**](topology/) - Packet Tracer files you can open and run.
+*   [**Diagrams Folder**](diagrams/) - Screenshots of the setups and proof that it works.
 
-
-## 4. Repository Structure
-
-```
-/configs/        Router and switch CLI configuration scripts
-/topology/       Cisco Packet Tracer simulation files (.pkt)
-/diagrams/       Network diagrams showing the before and after
-```
-
-## 5. Tools Used
-
-| Tool | What it was used for |
-|------|---------------------|
-| Cisco Packet Tracer | Building and testing the network simulation |
-| Draw.io | Creating the network diagrams |
-| Visual Studio Code | Writing the configuration scripts and documentation |
-| Git and GitHub | Version control and hosting the project |
-
-## 6. References
-
-- Cisco Systems, "Quality of Service Configuration Guide," Cisco IOS Documentation
-- Cisco Systems, "Configuring Port Security," Cisco Catalyst Switch Documentation
-- Cisco Systems, "Configuring DHCP Snooping," Cisco IOS Documentation
-- Cisco Systems, "Configuring NetFlow," Cisco IOS Documentation
+## 6. Tools I used
+*   **Cisco Packet Tracer** - For building and testing the whole simulation.
+*   **Draw.io** - For making the clean network diagrams.
+*   **GitHub** - To keep track of my work and host the files.

@@ -1,10 +1,11 @@
-# Configuration Scripts
+# Router and Switch CLI Scripts
 
-This directory contains the Cisco IOS configuration scripts for the network devices used in the simulation. Each file is broken into sections with explanations of what the commands do and why they are needed.
+This folder contains the actual configuration commands I used to build the network in Packet Tracer. Each file is broken down by section so you can see exactly what each group of commands does.
 
-## Contents
+| File | What it setup |
+|------|-------------|
+| [**edge_router_config.md**](edge_router_config.md) | The "Brain" of the network. It handles the VLAN routing, DHCP, and the QoS bandwidth limits. |
+| [**lab_switch_config.md**](lab_switch_config.md) | The security layer. It handles the VLAN splitting, the sticky MAC port security, and DHCP snooping. |
 
-| File | Device | What it configures |
-|------|--------|--------------------|
-| edge_router_config.md | Edge Router (Cisco 2911) | QoS rate-limiting, NetFlow monitoring, NAT, DHCP, inter-VLAN routing |
-| lab_switch_config.md | Managed Switch (Cisco 2960) | VLANs, Port Security, DHCP Snooping, trunk setup |
+---
+[**Back to Main Project Page**](../README.md)
