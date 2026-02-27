@@ -2,7 +2,7 @@
 
 ## 1. What's this project about?
 
-Our school computer lab has about 50 PCs sharing one internet connection. Right now, it's a bit of a mess—if one person starts a big download, everyone else's internet crawls. Plus, there's no way to see who's doing what, and anyone can just walk in and plug their own laptop into the wall and start using our bandwidth.
+Our school computer lab has about 50 PCs sharing one internet connection. Right now, it's a bit of a mess. If one person starts a big download, everyone else's internet crawls. Plus, there's no way to see who's doing what, and anyone can just walk in and plug their own laptop into the wall and start using our bandwidth.
 
 This project is my setup for fixing these three main issues:
 
@@ -34,7 +34,7 @@ We're also using **VLANs** to keep the student lab separate from the administrat
 ### 3.1 The "Before" State (Baseline)
 [View Baseline Diagram](diagrams/current_network.png)
 
-This is how the lab looks now—just one big flat network with no control and no security.
+This is how the lab looks now, just one big flat network with no control and no security.
 
 ### 3.2 The "After" State (Secured)
 [View Secured Diagram](diagrams/proposed_network.png)
@@ -47,7 +47,7 @@ I've tested everything in Cisco Packet Tracer. If you want to see how the securi
 
 1.  Open the [secured_network.pkt](topology/secured_network.pkt) file.
 2.  Try unplugging a PC and connecting a Laptop to the same port.
-3.  The port will turn **RED** immediately—that's the port security blocking the unauthorized device!
+3.  The port will turn **RED** immediately. That's the port security blocking the unauthorized device!
 
 ![Proof of security in action](diagrams/security_violation.png)
 *Self-test: The port shutting down after I tried to plug in an unauthorized laptop.*
