@@ -47,13 +47,13 @@ interface GigabitEthernet0/1
 
 interface GigabitEthernet0/1.10
  description Lab Workstations - VLAN 10
- encapsulation dot1Q 10
+ encapsulation dot1Q 10  ! Grouping all student PCs into their own network
  ip address 192.168.10.1 255.255.255.0
  ip nat inside
-
+ 
 interface GigabitEthernet0/1.20
  description Administration - VLAN 20
- encapsulation dot1Q 20
+ encapsulation dot1Q 20  ! Keeping staff traffic separate for better security
  ip address 192.168.20.1 255.255.255.0
  ip nat inside
 
@@ -108,16 +108,16 @@ Packet Tracer does not fully simulate QoS, so the rate-limiting will not be visi
 
 ```
 class-map match-all LAB_TRAFFIC
- match access-group 10
+ match access-group 10  ! Identifying specifically which traffic we want to control
 
 access-list 10 permit 192.168.10.0 0.0.0.255
 
 policy-map BANDWIDTH_LIMIT
  class LAB_TRAFFIC
-  police 2000000 50000 exceed-action drop
+  police 2000000 50000 exceed-action drop  ! Capping speed at 2Mbps to stop bandwidth hogging
 
 interface GigabitEthernet0/1.10
- service-policy output BANDWIDTH_LIMIT
+ service-policy output BANDWIDTH_LIMIT  ! Applying the speed limit to the student network
 ```
 
 ---
@@ -130,11 +130,11 @@ Packet Tracer does not support these commands, but they are included here becaus
 
 ```
 ip flow-export version 5
-ip flow-export destination 192.168.99.10 2055
+ip flow-export destination 192.168.99.10 2055  ! Sending traffic data to our monitoring dashboard
 
 interface GigabitEthernet0/1.10
- ip flow ingress
- ip flow egress
+ ip flow ingress  ! Tracking all data coming into the interface
+ ip flow egress   ! Tracking all data leaving the interface
 ```
 
 ---

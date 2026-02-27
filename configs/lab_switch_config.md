@@ -58,9 +58,9 @@ This port carries tagged traffic from all VLANs to the router so it can route be
 ```
 interface GigabitEthernet0/1
  description Trunk to Edge Router
- switchport mode trunk
+ switchport mode trunk  ! Carries traffic for all VLANs to the router
  switchport trunk allowed vlan 10,20,99
- switchport trunk native vlan 99
+ switchport trunk native vlan 99  ! Native VLAN 99 for better security than default VLAN 1
  no shutdown
 ```
 
@@ -80,18 +80,18 @@ interface range FastEthernet0/1 - 24
  description Lab Workstations
  switchport mode access
  switchport access vlan 10
- switchport port-security
- switchport port-security maximum 1
- switchport port-security mac-address sticky
- switchport port-security violation shutdown
- spanning-tree portfast
+ switchport port-security  ! Enabling security on this group of ports
+ switchport port-security maximum 1  ! Only 1 device allowed per port
+ switchport port-security mac-address sticky  ! Remember the first device that plugs in
+ switchport port-security violation shutdown  ! Kill the port if an intruder plugs in
+ spanning-tree portfast  ! Speeds up connection time for the PCs
  no shutdown
 
 interface range FastEthernet0/25 - 48
  description Lab Workstations (continued)
  switchport mode access
  switchport access vlan 10
- switchport port-security
+ switchport port-security  ! Security for the rest of the lab ports
  switchport port-security maximum 1
  switchport port-security mac-address sticky
  switchport port-security violation shutdown
@@ -110,7 +110,7 @@ interface range GigabitEthernet0/2 - 2
  description Admin Staff Machine
  switchport mode access
  switchport access vlan 20
- switchport port-security
+ switchport port-security  ! Security for staff machines too
  switchport port-security maximum 1
  switchport port-security mac-address sticky
  switchport port-security violation shutdown
@@ -125,11 +125,11 @@ interface range GigabitEthernet0/2 - 2
 This feature makes sure only the router can hand out IP addresses. The trunk port is marked as trusted because that is where the real DHCP server is. Every other port is untrusted by default, so if someone connects a rogue DHCP server, it gets blocked.
 
 ```
-ip dhcp snooping
+ip dhcp snooping  ! Guard against rogue DHCP servers
 ip dhcp snooping vlan 10,20
 
 interface GigabitEthernet0/1
- ip dhcp snooping trust
+ ip dhcp snooping trust  ! We only trust the router (on the trunk) to give out IPs
 ```
 
 ---
