@@ -2,7 +2,7 @@
 
 ## 1. What's this project about?
 
-Our school computer lab has about 50 PCs sharing one internet connection. Right now, it's a bit of a mess. If one person starts a big download, everyone else's internet crawls. Plus, there's no way to see who's doing what, and anyone can just walk in and plug their own laptop into the wall and start using our bandwidth.
+A school computer lab has about 50 PCs sharing one internet connection. Right now, it's a bit of a mess. If one person starts a big download, everyone else's internet crawls. Plus, there's no way to see who's doing what, and anyone can just walk in and plug their own laptop into the wall and start using our bandwidth.
 
 This project is my setup for fixing these three main issues:
 
