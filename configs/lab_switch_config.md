@@ -23,7 +23,6 @@ line console 0
 line vty 0 15
  password cisco
  login
- transport input ssh
 service password-encryption
 banner motd # Authorized Access Only. All activity is logged. #
 ```
@@ -56,11 +55,13 @@ vlan 99
 This port carries tagged traffic from all VLANs to the router so it can route between them. The native VLAN is set to 99 instead of the default VLAN 1 for security reasons.
 
 ```
+! Trunk carries traffic for all VLANs to the router
+! Native VLAN set to 99 for better security than default VLAN 1
 interface GigabitEthernet0/1
  description Trunk to Edge Router
- switchport mode trunk  ! Carries traffic for all VLANs to the router
+ switchport mode trunk
  switchport trunk allowed vlan 10,20,99
- switchport trunk native vlan 99  ! Native VLAN 99 for better security than default VLAN 1
+ switchport trunk native vlan 99
  no shutdown
 ```
 
@@ -76,27 +77,40 @@ This is the core security configuration. Each port is set to:
 - **Violation shutdown** so if someone plugs in a different device, the port disables itself
 
 ```
+! Enabling port security on all 24 lab ports
+! Only 1 device allowed per port — switch remembers the first device
+! If an intruder plugs in, the port shuts down automatically
 interface range FastEthernet0/1 - 24
  description Lab Workstations
  switchport mode access
  switchport access vlan 10
- switchport port-security  ! Enabling security on this group of ports
- switchport port-security maximum 1  ! Only 1 device allowed per port
- switchport port-security mac-address sticky  ! Remember the first device that plugs in
- switchport port-security violation shutdown  ! Kill the port if an intruder plugs in
- spanning-tree portfast  ! Speeds up connection time for the PCs
- no shutdown
-
-interface range FastEthernet0/25 - 48
- description Lab Workstations (continued)
- switchport mode access
- switchport access vlan 10
- switchport port-security  ! Security for the rest of the lab ports
+ switchport port-security
  switchport port-security maximum 1
  switchport port-security mac-address sticky
  switchport port-security violation shutdown
  spanning-tree portfast
  no shutdown
+```
+
+> **Packet Tracer Limitation:** The 2960-24TT switch model in Packet Tracer only has 24 FastEthernet ports (Fa0/1–Fa0/24). Ports Fa0/25–48 do not exist on this model, so those commands are commented out below. On a real 2960-48TT switch (which has 48 ports), you would uncomment these.
+
+```
+! ============================================================
+! EXTENDED PORT RANGE — NOT AVAILABLE ON 2960-24TT IN PACKET TRACER
+! The 2960-24TT only has FastEthernet 0/1 - 0/24.
+! On a real 48-port switch, uncomment these commands.
+! ============================================================
+!
+! interface range FastEthernet0/25 - 48
+!  description Lab Workstations (continued)
+!  switchport mode access
+!  switchport access vlan 10
+!  switchport port-security
+!  switchport port-security maximum 1
+!  switchport port-security mac-address sticky
+!  switchport port-security violation shutdown
+!  spanning-tree portfast
+!  no shutdown
 ```
 
 ---
@@ -106,11 +120,12 @@ interface range FastEthernet0/25 - 48
 A few ports are set aside for staff machines, with the same port security applied.
 
 ```
-interface range GigabitEthernet0/2 - 2
+! Security for staff machines too
+interface GigabitEthernet0/2
  description Admin Staff Machine
  switchport mode access
  switchport access vlan 20
- switchport port-security  ! Security for staff machines too
+ switchport port-security
  switchport port-security maximum 1
  switchport port-security mac-address sticky
  switchport port-security violation shutdown
@@ -124,12 +139,20 @@ interface range GigabitEthernet0/2 - 2
 
 This feature makes sure only the router can hand out IP addresses. The trunk port is marked as trusted because that is where the real DHCP server is. Every other port is untrusted by default, so if someone connects a rogue DHCP server, it gets blocked.
 
-```
-ip dhcp snooping  ! Guard against rogue DHCP servers
-ip dhcp snooping vlan 10,20
+> **Packet Tracer Limitation:** DHCP Snooping is supported in Packet Tracer 8.2 and newer. If you are on an older version, these commands may error. They are commented out for safety — if your version supports them, you can paste them without the `!` prefix.
 
-interface GigabitEthernet0/1
- ip dhcp snooping trust  ! We only trust the router (on the trunk) to give out IPs
+```
+! ============================================================
+! DHCP SNOOPING — MAY NOT WORK ON OLDER PACKET TRACER VERSIONS
+! Supported on Packet Tracer 8.2+. If your version supports it,
+! remove the ! and paste the commands directly.
+! ============================================================
+!
+! ip dhcp snooping
+! ip dhcp snooping vlan 10,20
+!
+! interface GigabitEthernet0/1
+!  ip dhcp snooping trust
 ```
 
 ---
@@ -140,7 +163,7 @@ Any port that is not being used should be shut down so no one can just walk in a
 
 ```
 ! Apply to any ports not in use, for example:
-! interface range FastEthernet0/49 - 48
+! interface range FastEthernet0/5 - 24
 !  shutdown
 ```
 

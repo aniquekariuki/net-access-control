@@ -23,7 +23,6 @@ line console 0
 line vty 0 4
  password cisco
  login
- transport input ssh
 service password-encryption
 banner motd # Authorized Access Only. All activity is logged. #
 ```
@@ -45,18 +44,21 @@ interface GigabitEthernet0/1
  description Trunk link to Managed Switch
  no shutdown
 
+! Sub-interface for student lab PCs (VLAN 10)
 interface GigabitEthernet0/1.10
  description Lab Workstations - VLAN 10
- encapsulation dot1Q 10  ! Grouping all student PCs into their own network
+ encapsulation dot1Q 10
  ip address 192.168.10.1 255.255.255.0
  ip nat inside
- 
+
+! Sub-interface for admin staff (VLAN 20)
 interface GigabitEthernet0/1.20
  description Administration - VLAN 20
- encapsulation dot1Q 20  ! Keeping staff traffic separate for better security
+ encapsulation dot1Q 20
  ip address 192.168.20.1 255.255.255.0
  ip nat inside
 
+! Sub-interface for management access (VLAN 99)
 interface GigabitEthernet0/1.99
  description Management - VLAN 99
  encapsulation dot1Q 99
@@ -88,14 +90,14 @@ ip dhcp excluded-address 192.168.10.1 192.168.10.10
 ip dhcp pool LAB_POOL
  network 192.168.10.0 255.255.255.0
  default-router 192.168.10.1
- dns-server 8.8.8.8 8.8.4.4
+ dns-server 8.8.8.8
  lease 0 8 0
 
 ip dhcp excluded-address 192.168.20.1 192.168.20.10
 ip dhcp pool ADMIN_POOL
  network 192.168.20.0 255.255.255.0
  default-router 192.168.20.1
- dns-server 8.8.8.8 8.8.4.4
+ dns-server 8.8.8.8
 ```
 
 ---
@@ -104,20 +106,27 @@ ip dhcp pool ADMIN_POOL
 
 This is the fix for the main problem. The policy below matches all traffic from the lab VLAN (192.168.10.0/24) and caps it at 2 Mbps. This prevents any single workstation from using all the bandwidth.
 
-Packet Tracer does not fully simulate QoS, so the rate-limiting will not be visible in the simulator. However, these are valid Cisco IOS commands that work on real hardware.
+> **Packet Tracer Limitation:** These are valid Cisco IOS commands for real hardware, but Packet Tracer does not support MQC (Modular QoS CLI). They are commented out with `!` so they remain visible in the documentation but will not cause errors if pasted into Packet Tracer.
 
 ```
-class-map match-all LAB_TRAFFIC
- match access-group 10  ! Identifying specifically which traffic we want to control
-
-access-list 10 permit 192.168.10.0 0.0.0.255
-
-policy-map BANDWIDTH_LIMIT
- class LAB_TRAFFIC
-  police 2000000 50000 exceed-action drop  ! Capping speed at 2Mbps to stop bandwidth hogging
-
-interface GigabitEthernet0/1.10
- service-policy output BANDWIDTH_LIMIT  ! Applying the speed limit to the student network
+! ============================================================
+! QoS COMMANDS — NOT SUPPORTED IN PACKET TRACER
+! These commands work on real Cisco routers but will error
+! in Packet Tracer. They are commented so they are visible
+! but will not execute.
+! ============================================================
+!
+! class-map match-all LAB_TRAFFIC
+!  match access-group 10
+!
+! access-list 10 permit 192.168.10.0 0.0.0.255
+!
+! policy-map BANDWIDTH_LIMIT
+!  class LAB_TRAFFIC
+!   police 2000000 50000 exceed-action drop
+!
+! interface GigabitEthernet0/1.10
+!  service-policy output BANDWIDTH_LIMIT
 ```
 
 ---
@@ -126,15 +135,22 @@ interface GigabitEthernet0/1.10
 
 NetFlow records every traffic flow passing through the router. It tracks which IP address is sending or receiving data, how much, and where to. The data is exported to a collector at 192.168.99.10 on port 2055, where it can be viewed on a dashboard.
 
-Packet Tracer does not support these commands, but they are included here because this is what would be configured on actual equipment.
+> **Packet Tracer Limitation:** These are valid Cisco IOS commands for real hardware, but Packet Tracer does not support NetFlow. They are commented out with `!` so they remain visible in the documentation but will not cause errors if pasted into Packet Tracer.
 
 ```
-ip flow-export version 5
-ip flow-export destination 192.168.99.10 2055  ! Sending traffic data to our monitoring dashboard
-
-interface GigabitEthernet0/1.10
- ip flow ingress  ! Tracking all data coming into the interface
- ip flow egress   ! Tracking all data leaving the interface
+! ============================================================
+! NETFLOW COMMANDS — NOT SUPPORTED IN PACKET TRACER
+! These commands work on real Cisco routers but will error
+! in Packet Tracer. They are commented so they are visible
+! but will not execute.
+! ============================================================
+!
+! ip flow-export version 5
+! ip flow-export destination 192.168.99.10 2055
+!
+! interface GigabitEthernet0/1.10
+!  ip flow ingress
+!  ip flow egress
 ```
 
 ---
