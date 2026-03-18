@@ -78,7 +78,7 @@ This is the core security configuration. Each port is set to:
 
 ```
 ! Enabling port security on all 24 lab ports
-! Only 1 device allowed per port — switch remembers the first device
+! Only 1 device allowed per port - switch remembers the first device
 ! If an intruder plugs in, the port shuts down automatically
 interface range FastEthernet0/1 - 24
  description Lab Workstations
@@ -96,7 +96,7 @@ interface range FastEthernet0/1 - 24
 
 ```
 ! ============================================================
-! EXTENDED PORT RANGE — NOT AVAILABLE ON 2960-24TT IN PACKET TRACER
+! EXTENDED PORT RANGE - NOT AVAILABLE ON 2960-24TT IN PACKET TRACER
 ! The 2960-24TT only has FastEthernet 0/1 - 0/24.
 ! On a real 48-port switch, uncomment these commands.
 ! ============================================================
@@ -139,11 +139,11 @@ interface GigabitEthernet0/2
 
 This feature makes sure only the router can hand out IP addresses. The trunk port is marked as trusted because that is where the real DHCP server is. Every other port is untrusted by default, so if someone connects a rogue DHCP server, it gets blocked.
 
-> **Packet Tracer Limitation:** DHCP Snooping is supported in Packet Tracer 8.2 and newer. If you are on an older version, these commands may error. They are commented out for safety — if your version supports them, you can paste them without the `!` prefix.
+> **Packet Tracer Limitation:** DHCP Snooping is supported in Packet Tracer 8.2 and newer. If you are on an older version, these commands may error. They are commented out for safety - if your version supports them, you can paste them without the `!` prefix.
 
 ```
 ! ============================================================
-! DHCP SNOOPING — MAY NOT WORK ON OLDER PACKET TRACER VERSIONS
+! DHCP SNOOPING - MAY NOT WORK ON OLDER PACKET TRACER VERSIONS
 ! Supported on Packet Tracer 8.2+. If your version supports it,
 ! remove the ! and paste the commands directly.
 ! ============================================================

@@ -10,9 +10,9 @@ This project solves 3 problems in a shared school computer lab. The table below 
 
 | Objective | Problem it Solves | Where it is Configured | Packet Tracer Support |
 |---|---|---|---|
-| **1. Bandwidth Control (QoS)** | One user hogging all bandwidth | Router — class-map, policy-map, police | Not supported — commands are documented but commented out |
-| **2. Traffic Visibility (NetFlow)** | Admin cannot see who is using the most data | Router — ip flow-export, ip flow ingress/egress | Not supported — commands are documented but commented out |
-| **3. Network Hardening (Port Security + VLANs)** | Unauthorized devices plugging into the network | Switch — port-security, sticky MAC, VLANs | Fully supported — live demo included |
+| **1. Bandwidth Control (QoS)** | One user hogging all bandwidth | Router - class-map, policy-map, police | Not supported - commands are documented but commented out |
+| **2. Traffic Visibility (NetFlow)** | Admin cannot see who is using the most data | Router - ip flow-export, ip flow ingress/egress | Not supported - commands are documented but commented out |
+| **3. Network Hardening (Port Security + VLANs)** | Unauthorized devices plugging into the network | Switch - port-security, sticky MAC, VLANs | Fully supported - live demo included |
 
 Objectives 1 and 2 use valid Cisco IOS commands that run on real production hardware but are not supported by Packet Tracer's simulator. They are included in Part 2 as commented-out commands so the full solution is documented.
 
@@ -140,7 +140,7 @@ Type these commands one by one to check everything is correct:
 show ip interface brief
 ```
 
-Expected output — you should see:
+Expected output - you should see:
 
 ```
 Interface                  IP-Address      OK? Method Status                Protocol
@@ -158,15 +158,15 @@ If GigabitEthernet0/1 shows "up" and the sub-interfaces show their IP addresses,
 show ip dhcp pool
 ```
 
-Expected output — you should see LAB_POOL and ADMIN_POOL listed with their network ranges.
+Expected output - you should see LAB_POOL and ADMIN_POOL listed with their network ranges.
 
-### 2.4 Objective 1: Bandwidth Control (QoS) — Documented Only
+### 2.4 Objective 1: Bandwidth Control (QoS) - Documented Only
 
 These QoS commands solve the bandwidth hogging problem by capping each lab workstation at 2 Mbps. They use Cisco's Modular QoS CLI (class-map, policy-map, police).
 
 Packet Tracer does not support MQC, so these commands are commented out. On a real Cisco 2911 router, you would paste them without the `!` prefix and they would execute.
 
-If you paste the block below into Packet Tracer, IOS will simply ignore the lines starting with `!` — no errors will occur.
+If you paste the block below into Packet Tracer, IOS will simply ignore the lines starting with `!` - no errors will occur.
 
 ```
 ! ============================================================
@@ -198,9 +198,9 @@ If you paste the block below into Packet Tracer, IOS will simply ignore the line
 | `police 2000000 50000 exceed-action drop` | Limits traffic to 2 Mbps (2,000,000 bits/sec). Any traffic above this is dropped |
 | `service-policy output BANDWIDTH_LIMIT` | Applies the policy to outbound traffic on the lab VLAN sub-interface |
 
-### 2.5 Objective 2: Traffic Visibility (NetFlow) — Documented Only
+### 2.5 Objective 2: Traffic Visibility (NetFlow) - Documented Only
 
-These NetFlow commands solve the visibility problem by tracking every data flow through the router — which IP is sending/receiving, how much data, and where it goes.
+These NetFlow commands solve the visibility problem by tracking every data flow through the router - which IP is sending/receiving, how much data, and where it goes.
 
 Packet Tracer does not support NetFlow at all. On real equipment, these commands would export flow data to a monitoring dashboard at 192.168.99.10.
 
@@ -236,7 +236,7 @@ Click on the **Switch** → go to the **CLI** tab.
 
 Press Enter to get to the `Switch>` prompt.
 
-### 3.1 Paste Switch Commands — Block 1: Basic Setup and VLANs
+### 3.1 Paste Switch Commands - Block 1: Basic Setup and VLANs
 
 Copy and paste this first block:
 
@@ -289,9 +289,9 @@ VLAN Name                             Status    Ports
 99   Management                       active
 ```
 
-You should see VLANs 10, 20, and 99 listed. The ports will still be on VLAN 1 — that is normal, we will move them in the next step.
+You should see VLANs 10, 20, and 99 listed. The ports will still be on VLAN 1 - that is normal, we will move them in the next step.
 
-### 3.3 Paste Switch Commands — Block 2: Trunk Port
+### 3.3 Paste Switch Commands - Block 2: Trunk Port
 
 ```
 configure terminal
@@ -312,9 +312,9 @@ Expected output:
 - No errors
 - `Building configuration... [OK]`
 
-### 3.4 Paste Switch Commands — Block 3: Port Security
+### 3.4 Paste Switch Commands - Block 3: Port Security
 
-This is the most important block — the port security configuration.
+This is the most important block - the port security configuration.
 
 ```
 configure terminal
@@ -339,7 +339,7 @@ Expected output:
 - You will see `%Warning: portfast should only be enabled on ports connected to a single host...` repeated for each of the 24 ports. **This is normal.** These are informational warnings, not errors.
 - At the end: `Building configuration... [OK]`
 
-### 3.5 Paste Switch Commands — Block 4: Management VLAN
+### 3.5 Paste Switch Commands - Block 4: Management VLAN
 
 ```
 configure terminal
@@ -388,7 +388,7 @@ If you see this, port security is fully configured.
 show vlan brief
 ```
 
-Expected output — now the FastEthernet ports should be under VLAN 10:
+Expected output - now the FastEthernet ports should be under VLAN 10:
 
 ```
 VLAN Name                             Status    Ports
@@ -420,7 +420,7 @@ Default Gateway: 192.168.10.1
 DNS Server:      8.8.8.8
 ```
 
-Repeat for PC 2 and PC 3 — they should each get a different IP in the 192.168.10.x range.
+Repeat for PC 2 and PC 3 - they should each get a different IP in the 192.168.10.x range.
 
 ### 4.2 Test Connectivity
 
@@ -445,7 +445,7 @@ Ping statistics for 192.168.10.1:
     Packets: Sent = 4, Received = 4, Lost = 0 (0% loss)
 ```
 
-The first ping might time out (say "Request timed out") — that is normal on the first attempt because of ARP resolution. Try pinging again and all 4 should reply.
+The first ping might time out (say "Request timed out") - that is normal on the first attempt because of ARP resolution. Try pinging again and all 4 should reply.
 
 ### 4.3 Verify the Switch Learned the MAC Address
 
@@ -473,16 +473,16 @@ Security Violation Count   : 0
 ```
 
 Key things to look for:
-- **Port Status: Secure-up** — means the port is active and secured
-- **Sticky MAC Addresses: 1** — the switch has learned the PC's MAC
-- **Last Source Address** — shows the MAC address of the PC that is authorized on this port
-- **Security Violation Count: 0** — no violations yet
+- **Port Status: Secure-up** - means the port is active and secured
+- **Sticky MAC Addresses: 1** - the switch has learned the PC's MAC
+- **Last Source Address** - shows the MAC address of the PC that is authorized on this port
+- **Security Violation Count: 0** - no violations yet
 
 ---
 
 ## Part 5: Trigger the Security Violation (The Demo)
 
-This is the "wow moment" — proving that an unauthorized device gets blocked.
+This is the "wow moment" - proving that an unauthorized device gets blocked.
 
 ### 5.1 Remove the Authorized PC
 

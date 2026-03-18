@@ -110,7 +110,7 @@ This is the fix for the main problem. The policy below matches all traffic from 
 
 ```
 ! ============================================================
-! QoS COMMANDS — NOT SUPPORTED IN PACKET TRACER
+! QoS COMMANDS - NOT SUPPORTED IN PACKET TRACER
 ! These commands work on real Cisco routers but will error
 ! in Packet Tracer. They are commented so they are visible
 ! but will not execute.
@@ -139,7 +139,7 @@ NetFlow records every traffic flow passing through the router. It tracks which I
 
 ```
 ! ============================================================
-! NETFLOW COMMANDS — NOT SUPPORTED IN PACKET TRACER
+! NETFLOW COMMANDS - NOT SUPPORTED IN PACKET TRACER
 ! These commands work on real Cisco routers but will error
 ! in Packet Tracer. They are commented so they are visible
 ! but will not execute.
